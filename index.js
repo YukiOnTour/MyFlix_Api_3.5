@@ -19,8 +19,23 @@ app.use(express.static(path.join(__dirname, 'public'))); // Serving static files
 app.use(bodyParser.json()); // Middleware to parse JSON request bodies
 
 // CORS configuration
-app.use(cors());
+const allowedOrigins = ['http://localhost:3000', 'mongodb+srv://yukiontour:Test123@cluster0.vimspko.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'];
 
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests for all routes
+app.options('*', cors(corsOptions));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
@@ -87,7 +102,7 @@ app.post('/users',
     validate,
     async (req, res) => {
         try {
-            // const hashedPassword = await bcrypt.hash(req.body.password, 10); remove this to avooid double hashing
+            // const hashedPassword = await bcrypt.hash(req.body.password, 10); remove this to avoid double hashing
             const user = await User.create({
                 username: req.body.username,
                 password: req.body.Password,
