@@ -19,7 +19,20 @@ app.use(express.static(path.join(__dirname, 'public'))); // Serving static files
 app.use(bodyParser.json()); // Middleware to parse JSON request bodies
 
 // CORS configuration
+const allowedOrigins = ['http://localhost:3000','http://localhost:8080','http://localhost:1234'];
 
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 
 // Handle preflight requests for all routes
 app.options('*', cors(corsOptions));
@@ -92,7 +105,7 @@ app.post('/users',
             // const hashedPassword = await bcrypt.hash(req.body.password, 10); remove this to avoid double hashing
             const user = await User.create({
                 username: req.body.username,
-                password: req.body.Password,
+                password: req.body.password,
                 email: req.body.email,
                 birthday: req.body.birthday
             });
