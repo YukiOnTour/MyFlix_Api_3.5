@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // Serving static files
 app.use(bodyParser.json()); // Middleware to parse JSON request bodies
 
 // CORS configuration
-const allowedOrigins = ['http://localhost:3000', 'mongodb+srv://yukiontour:Test123@cluster0.vimspko.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'];
+const allowedOrigins = ['http://localhost:3000','http://localhost:8080','http://localhost:1234'];
 
 const corsOptions = {
     origin: function (origin, callback) {
