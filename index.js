@@ -105,7 +105,7 @@ app.post('/users',
             // const hashedPassword = await bcrypt.hash(req.body.password, 10); remove this to avoid double hashing
             const user = await User.create({
                 username: req.body.username,
-                password: req.body.Password,
+                password: req.body.password,
                 email: req.body.email,
                 birthday: req.body.birthday
             });
